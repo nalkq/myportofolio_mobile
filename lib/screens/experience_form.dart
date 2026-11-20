@@ -50,20 +50,16 @@ class _ExperienceFormPageState extends State<ExperienceFormPage> {
       context: context,
       builder: (dialogContext) {
         return AlertDialog(
-          title: const Text('Ringkasan Experience'),
+          title: const Text('Experience berhasil ditambahkan!'),
           content: SingleChildScrollView(
             child: Column(
               mainAxisSize: MainAxisSize.min,
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text('Judul/Posisi: $_title'),
-                const SizedBox(height: 8),
                 Text('Perusahaan/Organisasi: $_company'),
-                const SizedBox(height: 8),
                 Text('Periode: $_dateRange'),
-                const SizedBox(height: 8),
                 Text('Deskripsi: $_description'),
-                const SizedBox(height: 8),
                 Text(
                   'Status aktif: ${_isActive ? "Ya" : "Tidak"}',
                 ),
