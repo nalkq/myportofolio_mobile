@@ -1,6 +1,7 @@
 import 'package:material_ui/material_ui.dart';
 import 'package:myportofolio_mobile/widgets/left_drawer.dart';
 import 'package:myportofolio_mobile/widgets/project_card.dart';
+import 'package:myportofolio_mobile/widgets/experience_card.dart';
 
 class MyHomePage extends StatelessWidget {
   MyHomePage({super.key});
@@ -12,6 +13,7 @@ class MyHomePage extends StatelessWidget {
   final List<ItemHomepage> items = [
     ItemHomepage("Lihat Proyek", Icons.folder, Colors.blue.shade700),
     ItemHomepage("Tambah Proyek", Icons.add_circle, Colors.green.shade700,),
+    ItemHomepage("Tambah Experience",Icons.work_outline,Colors.orange.shade700,),
     ItemHomepage("Logout", Icons.logout, Colors.red.shade700),
   ];
 
@@ -33,7 +35,7 @@ class MyHomePage extends StatelessWidget {
       ),
       drawer: const LeftDrawer(),
       // Body halaman utama dengan padding di sekelilingnya.
-      body: Padding(
+      body: SingleChildScrollView(
         padding: const EdgeInsets.all(16.0),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.center,
@@ -42,9 +44,9 @@ class MyHomePage extends StatelessWidget {
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               children: [
-                InfoCard(title: 'NPM', content: npm),
-                InfoCard(title: 'Name', content: nama),
-                InfoCard(title: 'Class', content: kelas),
+                Expanded(child: InfoCard(title: 'NPM', content: npm),),
+                Expanded(child: InfoCard(title: 'Name', content: nama),),
+                Expanded(child: InfoCard(title: 'Class', content: kelas),),
               ],
             ),
 
@@ -67,14 +69,19 @@ class MyHomePage extends StatelessWidget {
 
                   // GridView menampilkan kartu tombol dalam tata letak kisi 3 kolom.
                   GridView.count(
-                    primary: true,
+                    primary: false,
+                    physics: const NeverScrollableScrollPhysics(),
                     padding: const EdgeInsets.all(20),
                     crossAxisSpacing: 10,
                     mainAxisSpacing: 10,
-                    crossAxisCount: 3,
-                    // shrinkWrap agar ukuran kisi menyesuaikan tinggi konten anak.
+                    crossAxisCount:
+                        MediaQuery.of(context).size.width < 600 ? 2 : 3,
                     shrinkWrap: true,
                     children: items.map((ItemHomepage item) {
+                      if (item.name == "Tambah Experience") {
+                        return ExperienceCard(item);
+                      }
+
                       return ItemCard(item);
                     }).toList(),
                   ),
@@ -101,8 +108,6 @@ class InfoCard extends StatelessWidget {
       // Memberikan efek bayangan kartu elevasi 2 unit.
       elevation: 2.0,
       child: Container(
-        // Menyesuaikan lebar kartu dengan proporsi layar (dibagi 3.5).
-        width: MediaQuery.of(context).size.width / 3.5,
         padding: const EdgeInsets.all(16.0),
         // Menyusun teks title dan content secara vertikal.
         child: Column(

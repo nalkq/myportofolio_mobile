@@ -67,6 +67,11 @@ Pada pengerjaan tugas kali ini, saya tidak mengalami kesulitan yang signifikan k
 
 https://chatgpt.com/s/cx_6afab7caf21c819198f675290d2b70a1
 
+### Tugas 8
+Pada pengerjaan tugas kali ini, saya cukup kesulitan untuk mencoba membuat tampilan form sendiri tanpa panduan tutorial, saya menggunakan bantuan AI untuk memberikan saya panduan dalam membuat form experiece yang ingin saya buat. Saya cukup kesulitan dan kurang mengerti penjelasan yang diberikan oleh AI. Saya juga menggunakan AI untuk membantu saya lebih paham lagi apa yang ditanyakan pada pertanyaan reflektif.
+
+https://chatgpt.com/s/cx_6b002fa590f48191981ab112700e9451
+
 ## Pertanyaan Reflektif
 ### Tugas 7
 
@@ -106,3 +111,23 @@ BuildContext bisa dibayangkan sebagai alamat suatu widget dalam susunan aplikasi
 
 #### 6. Jelaskan konsep hot reload di Flutter dan apa perbedaannya dengan hot restart! Kapan kita tidak bisa hanya mengandalkan hot reload dan harus melakukan hot restart atau full restart?
 Hot reload: memperlihatkan perubahan kode tanpa mengulang aplikasi dari awal. Cocok untuk mencoba perubahan tulisan atau warna. Data yang sedang digunakan tetap dipertahankan. Hot restart: mengulang aplikasi Flutter dari awal sehingga datanya kembali ke kondisi awal. Digunakan jika ingin menjalankan ulang pengaturan awal aplikasi. Full restart: menghentikan aplikasi lalu menjalankannya kembali sepenuhnya. Diperlukan, misalnya, ketika mengubah bagian Android yang ditulis dengan Java atau Kotlin. Untuk perubahan tampilan sederhana bisa memakai hot reload. Jika perlu mengulang proses awal, bisa memakai hot restart.
+
+
+### Tugas 8
+
+#### 1. Jelaskan perbedaan antara `Navigator.push()`, `Navigator.pushReplacement()`, dan `Navigator.pop()`. Metode apa yang digunakan untuk membuka formulir dari kartu aksi? Jelaskan juga bagaimana opsi Home di drawer membawa pengguna kembali ke halaman utama.
+`Navigator.push()` membuka halaman baru tanpa menghapus halaman sebelumnya, sehingga pengguna bisa kembali menggunakan tombol Back. `Navigator.pushReplacement()` mengganti halaman yang sedang dibuka dengan halaman baru. Sementara itu, `Navigator.pop()` menutup halaman atau dialog yang sedang terbuka.
+Pada kode ini, kartu Tambah Experience menggunakan `Navigator.push()` untuk membuka formulir. Opsi Home pada drawer menggunakan `Navigator.pushReplacement()` untuk mengganti halaman formulir dengan halaman utama.
+
+#### 2. Bagaimana susunan `Scaffold`, `AppBar`, dan `Drawer` membantu menjaga struktur halaman tetap konsisten? Berikan satu contoh penggunaan warna tema portofolio di lebih dari satu halaman.
+`Scaffold` menyediakan kerangka halaman, `AppBar` menampilkan judul di bagian atas, dan `Drawer` menyediakan menu untuk berpindah halaman.
+Saya menggunakan drawer yang sama pada halaman utama dan formulir agar pilihan navigasinya konsisten. Selain itu, `AppBar` pada halaman utama dan formulir `Experience` sama-sama menggunakan warna utama dari tema aplikasi.
+
+#### 3. Mengapa tata letak tersebut dipilih untuk formulir? Jelaskan peran widget pengatur jarak dan widget penggulir ketika ruang layar terbatas.
+Saya menggunakan Column untuk menyusun input dari atas ke bawah agar formulir mudah dibaca dan diisi. `Padding` memberikan jarak dari tepi halaman, sedangkan `SizedBox` memberikan jarak antarelemen supaya tidak berdempetan.
+Saya juga menggunakan `SingleChildScrollView` agar formulir bisa digulir. Dengan begitu, pengguna tetap dapat menjangkau seluruh input dan tombol Simpan pada layar kecil atau ketika keyboard muncul.
+
+#### 4. Apa peran `GlobalKey<FormState>`, `validator`, dan `validate()` saat tombol Simpan ditekan? Berikan satu contoh nilai yang ditolak oleh validasi dan jelaskan mengapa memilih jenis input atau papan ketik saja belum cukup.
+`GlobalKey<FormState>` digunakan untuk mengakses keadaan form. Setiap `validator` berisi aturan pemeriksaan input pada kolom terkait. Saat tombol Simpan ditekan, `validate()` menjalankan seluruh pemeriksaan tersebut.
+Jika ada input yang salah, pesan kesalahan ditampilkan pada kolom terkait. Jika semuanya benar, aplikasi menampilkan dialog berisi isian pengguna.
+Contoh input yang ditolak adalah judul yang hanya berisi spasi, karena judul wajib memiliki isi. Judul yang melebihi 100 karakter juga ditolak. Memilih jenis input atau keyboard saja belum cukup karena tidak otomatis memeriksa apakah kolom kosong, hanya berisi spasi, atau terlalu panjang.
