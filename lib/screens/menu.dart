@@ -1,6 +1,7 @@
 import 'package:material_ui/material_ui.dart';
 import 'package:myportofolio_mobile/widgets/left_drawer.dart';
 import 'package:myportofolio_mobile/widgets/project_card.dart';
+import 'package:myportofolio_mobile/widgets/experience_card.dart';
 
 class MyHomePage extends StatelessWidget {
   MyHomePage({super.key});
@@ -12,6 +13,7 @@ class MyHomePage extends StatelessWidget {
   final List<ItemHomepage> items = [
     ItemHomepage("Lihat Proyek", Icons.folder, Colors.blue.shade700),
     ItemHomepage("Tambah Proyek", Icons.add_circle, Colors.green.shade700,),
+    ItemHomepage("Tambah Experience",Icons.work_outline,Colors.orange.shade700,),
     ItemHomepage("Logout", Icons.logout, Colors.red.shade700),
   ];
 
@@ -75,6 +77,10 @@ class MyHomePage extends StatelessWidget {
                     // shrinkWrap agar ukuran kisi menyesuaikan tinggi konten anak.
                     shrinkWrap: true,
                     children: items.map((ItemHomepage item) {
+                      if (item.name == "Tambah Experience") {
+                        return ExperienceCard(item);
+                      }
+
                       return ItemCard(item);
                     }).toList(),
                   ),
