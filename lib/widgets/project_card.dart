@@ -20,7 +20,9 @@ class ItemCard extends StatelessWidget {
         onTap: () async {
           if (item.name == 'Lihat Proyek') {
             Navigator.of(context).push<void>(
-              MaterialPageRoute<void>(builder: (_) => const ProjectListScreen()),
+              MaterialPageRoute<void>(
+                builder: (_) => const ProjectListScreen(),
+              ),
             );
             return;
           }
@@ -42,9 +44,9 @@ class ItemCard extends StatelessWidget {
             await auth.logout();
             if (!context.mounted) return;
 
-            ScaffoldMessenger.of(context).showSnackBar(
-              const SnackBar(content: Text('Kamu sudah logout.')),
-            );
+            ScaffoldMessenger.of(
+              context,
+            ).showSnackBar(const SnackBar(content: Text('Kamu sudah logout.')));
           }
         },
         child: Container(
@@ -53,11 +55,7 @@ class ItemCard extends StatelessWidget {
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                Icon(
-                  item.icon,
-                  color: Colors.white,
-                  size: 30.0,
-                ),
+                Icon(item.icon, color: Colors.white, size: 30.0),
                 const Padding(padding: EdgeInsets.all(3)),
                 Text(
                   item.name,

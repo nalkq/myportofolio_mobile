@@ -36,7 +36,10 @@ class ApiClient {
         .toList();
   }
 
-  Future<Project> createProject(Project project, {required String token}) async {
+  Future<Project> createProject(
+    Project project, {
+    required String token,
+  }) async {
     final response = await _client.post(
       _uri('/api/v1/projects/'),
       headers: {
@@ -63,8 +66,8 @@ class ApiClient {
     );
     _ensureSuccess(response);
 
-    final data = jsonDecode(utf8.decode(response.bodyBytes))
-        as Map<String, dynamic>;
+    final data =
+        jsonDecode(utf8.decode(response.bodyBytes)) as Map<String, dynamic>;
     return data['token'] as String;
   }
 
