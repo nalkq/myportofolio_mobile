@@ -4,6 +4,7 @@ import 'package:myportofolio_mobile/screens/project_form.dart';
 import 'package:myportofolio_mobile/services/auth_state.dart';
 import 'package:myportofolio_mobile/widgets/auth_guard.dart';
 import 'package:provider/provider.dart';
+import 'package:myportofolio_mobile/screens/experience_form.dart';
 
 class LeftDrawer extends StatelessWidget {
   const LeftDrawer({super.key});
@@ -39,8 +40,14 @@ class LeftDrawer extends StatelessWidget {
             leading: const Icon(Icons.home_outlined),
             title: const Text('Home'),
             onTap: () {
-              Navigator.of(context).pushReplacement(
-                MaterialPageRoute(builder: (_) => MyHomePage()),
+              final navigator = Navigator.of(context);
+
+              navigator.pop();
+
+              navigator.pushReplacement(
+                MaterialPageRoute(
+                  builder: (context) => MyHomePage(),
+                ),
               );
             },
           ),
