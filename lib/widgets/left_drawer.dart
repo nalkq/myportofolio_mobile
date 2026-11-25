@@ -1,12 +1,16 @@
 import 'package:material_ui/material_ui.dart';
 import 'package:myportofolio_mobile/screens/menu.dart';
 import 'package:myportofolio_mobile/screens/project_form.dart';
+import 'package:myportofolio_mobile/services/auth_state.dart';
+import 'package:myportofolio_mobile/widgets/auth_guard.dart';
+import 'package:provider/provider.dart';
 
 class LeftDrawer extends StatelessWidget {
   const LeftDrawer({super.key});
 
   @override
   Widget build(BuildContext context) {
+    final isLoggedIn = context.watch<AuthState>().isLoggedIn;
     return Drawer(
       child: ListView(
         children: [
@@ -39,27 +43,35 @@ class LeftDrawer extends StatelessWidget {
           ListTile(
             leading: const Icon(Icons.home_outlined),
             title: const Text('Home'),
-            // Navigasi ke halaman utama portofolio
             onTap: () {
-              Navigator.pushReplacement(
-                context,
-                MaterialPageRoute(
-                  builder: (context) => MyHomePage(),
-                ),
+              Navigator.of(context).pushReplacement(
+                MaterialPageRoute(builder: (_) => MyHomePage()),
               );
             },
           ),
           ListTile(
             leading: const Icon(Icons.add_circle_outline),
             title: const Text('Add Project'),
-            // Navigasi ke halaman tambah proyek
-            onTap: () {
-              Navigator.push(
-                context,
-                MaterialPageRoute(
-                  builder: (context) => const ProjectFormPage(),
-                ),
+            onTap: () async {
+              final allowed = await ensureLoggedIn(context);
+              if (!context.mounted || !allowed) return;
+
+              final navigator = Navigator.of(context);
+              Scaffold.of(context).closeDrawer();
+              navigator.push<void>(
+                MaterialPageRoute<void>(builder: (_) => const ProjectFormPage()),
               );
+            },
+          ),
+          ListTile(
+            leading: Icon(isLoggedIn ? Icons.logout : Icons.login),
+            title: Text(isLoggedIn ? 'Logout' : 'Login'),
+            onTap: () async {
+              if (isLoggedIn) {
+                await context.read<AuthState>().logout();
+              } else {
+                await ensureLoggedIn(context);
+              }
             },
           ),
         ],

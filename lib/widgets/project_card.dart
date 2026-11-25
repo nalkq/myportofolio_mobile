@@ -1,6 +1,9 @@
 import 'package:material_ui/material_ui.dart';
 import 'package:myportofolio_mobile/screens/menu.dart';
 import 'package:myportofolio_mobile/screens/project_form.dart';
+import 'package:myportofolio_mobile/services/auth_state.dart';
+import 'package:myportofolio_mobile/widgets/auth_guard.dart';
+import 'package:provider/provider.dart';
 
 class ItemCard extends StatelessWidget {
   final ItemHomepage item;
@@ -14,28 +17,33 @@ class ItemCard extends StatelessWidget {
       borderRadius: BorderRadius.circular(12),
       child: InkWell(
         // Aksi ketika kartu ditekan oleh pengguna.
-        onTap: () {
+        onTap: () async {
           if (item.name == 'Lihat Proyek') {
             Navigator.of(context).push<void>(
               MaterialPageRoute<void>(builder: (_) => const ProjectListScreen()),
             );
             return;
           }
-          
-          // Menampilkan SnackBar dengan pesan interaktif.
-          ScaffoldMessenger.of(context)
-            ..hideCurrentSnackBar()
-            ..showSnackBar(
-              SnackBar(content: Text("Kamu telah menekan tombol ${item.name}!"))
-            );
 
-          // Navigate ke halaman yang sesuai
-          if (item.name == "Tambah Proyek") {
-            Navigator.push(
-              context,
-              MaterialPageRoute(
-                builder: (context) => const ProjectFormPage(),
-              ),
+          if (item.name == 'Tambah Proyek') {
+            final allowed = await ensureLoggedIn(context);
+            if (!context.mounted || !allowed) return;
+
+            Navigator.of(context).push<void>(
+              MaterialPageRoute<void>(builder: (_) => const ProjectFormPage()),
+            );
+            return;
+          }
+
+          if (item.name == 'Logout') {
+            final auth = context.read<AuthState>();
+            if (!auth.isLoggedIn) return;
+
+            await auth.logout();
+            if (!context.mounted) return;
+
+            ScaffoldMessenger.of(context).showSnackBar(
+              const SnackBar(content: Text('Kamu sudah logout.')),
             );
           }
         },
