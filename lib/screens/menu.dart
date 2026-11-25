@@ -1,6 +1,7 @@
 import 'package:material_ui/material_ui.dart';
 import 'package:myportofolio_mobile/widgets/left_drawer.dart';
 import 'package:myportofolio_mobile/widgets/project_card.dart';
+import 'package:myportofolio_mobile/models/project.dart';
 
 class MyHomePage extends StatelessWidget {
   MyHomePage({super.key});
@@ -126,4 +127,33 @@ class ItemHomepage {
   final Color color;
 
   ItemHomepage(this.name, this.icon, this.color);
+}
+
+class ProjectDetailScreen extends StatelessWidget {
+  const ProjectDetailScreen({super.key, required this.project});
+
+  final Project project;
+
+  @override
+  Widget build(BuildContext context) {
+    final imageUrl = project.projectImageUrl.trim();
+
+    return Scaffold(
+      appBar: AppBar(title: Text(project.title)),
+      body: ListView(
+        padding: const EdgeInsets.all(16),
+        children: [
+          if (imageUrl.isNotEmpty) ...[
+            Image.network(imageUrl),
+            const SizedBox(height: 16),
+          ],
+          Text(project.description),
+          const SizedBox(height: 16),
+          Text('Teknologi: ${project.techStack}'),
+          const SizedBox(height: 8),
+          SelectableText(project.projectUrl),
+        ],
+      ),
+    );
+  }
 }

@@ -15,6 +15,13 @@ class ItemCard extends StatelessWidget {
       child: InkWell(
         // Aksi ketika kartu ditekan oleh pengguna.
         onTap: () {
+          if (item.name == 'Lihat Proyek') {
+            Navigator.of(context).push<void>(
+              MaterialPageRoute<void>(builder: (_) => const ProjectListScreen()),
+            );
+            return;
+          }
+          
           // Menampilkan SnackBar dengan pesan interaktif.
           ScaffoldMessenger.of(context)
             ..hideCurrentSnackBar()
