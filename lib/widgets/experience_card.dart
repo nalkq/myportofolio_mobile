@@ -1,6 +1,8 @@
 import 'package:material_ui/material_ui.dart';
 import 'package:myportofolio_mobile/screens/menu.dart';
 import 'package:myportofolio_mobile/screens/experience_form.dart';
+import 'package:myportofolio_mobile/screens/experience_list_screen.dart';
+import 'package:myportofolio_mobile/widgets/auth_guard.dart';
 
 class ExperienceCard extends StatelessWidget {
   final ItemHomepage item;
@@ -14,18 +16,21 @@ class ExperienceCard extends StatelessWidget {
       borderRadius: BorderRadius.circular(12),
       child: InkWell(
         borderRadius: BorderRadius.circular(12),
-        onTap: () {
-          ScaffoldMessenger.of(context)
-            ..hideCurrentSnackBar()
-            ..showSnackBar(
-              SnackBar(
-                content: Text("Kamu telah menekan tombol ${item.name}!"),
+        onTap: () async {
+          if (item.name == 'Lihat Experience') {
+            Navigator.of(context).push<void>(
+              MaterialPageRoute<void>(
+                builder: (_) => const ExperienceListScreen(),
               ),
             );
+            return;
+          }
 
-          Navigator.push(
-            context,
-            MaterialPageRoute(builder: (context) => const ExperienceFormPage()),
+          final allowed = await ensureLoggedIn(context);
+          if (!context.mounted || !allowed) return;
+
+          Navigator.of(context).push<bool>(
+            MaterialPageRoute<bool>(builder: (_) => const ExperienceFormPage()),
           );
         },
         child: Padding(
