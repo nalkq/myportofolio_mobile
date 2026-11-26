@@ -2,6 +2,7 @@ import 'dart:convert';
 
 import 'package:http/http.dart' as http;
 import 'package:myportofolio_mobile/config.dart';
+import 'package:myportofolio_mobile/models/experience.dart';
 import 'package:myportofolio_mobile/models/project.dart';
 
 class ApiException implements Exception {
@@ -53,6 +54,49 @@ class ApiClient {
 
     final data = jsonDecode(utf8.decode(response.bodyBytes));
     return Project.fromJson(data as Map<String, dynamic>);
+  }
+
+  Future<List<Experience>> getExperiences() async {
+    final response = await _client.get(
+      _uri('/api/v1/experiences/'),
+      headers: const {'Accept': 'application/json'},
+    );
+    _ensureSuccess(response);
+
+    final data = jsonDecode(utf8.decode(response.bodyBytes)) as List<dynamic>;
+    return data
+        .map((item) => Experience.fromJson(item as Map<String, dynamic>))
+        .toList();
+  }
+
+  Future<Experience> getExperience(int id) async {
+    final response = await _client.get(
+      _uri('/api/v1/experiences/$id/'),
+      headers: const {'Accept': 'application/json'},
+    );
+    _ensureSuccess(response);
+
+    final data = jsonDecode(utf8.decode(response.bodyBytes));
+    return Experience.fromJson(data as Map<String, dynamic>);
+  }
+
+  Future<Experience> createExperience(
+    Experience experience, {
+    required String token,
+  }) async {
+    final response = await _client.post(
+      _uri('/api/v1/experiences/'),
+      headers: {
+        'Accept': 'application/json',
+        'Content-Type': 'application/json; charset=UTF-8',
+        'Authorization': 'Token $token',
+      },
+      body: jsonEncode(experience.toJson()),
+    );
+    _ensureSuccess(response);
+
+    final data = jsonDecode(utf8.decode(response.bodyBytes));
+    return Experience.fromJson(data as Map<String, dynamic>);
   }
 
   Future<String> obtainToken(String username, String password) async {
