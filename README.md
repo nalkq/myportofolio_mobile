@@ -1,3 +1,5 @@
+[![CI](https://github.com/nalkq/myportofolio_mobile/actions/workflows/main.yaml/badge.svg?branch=Tugas-9)](https://github.com/nalkq/myportofolio_mobile/actions/workflows/main.yaml)
+
 Nama : Kaysan Navid Musyaffa
 
 NPM : 2506625470
@@ -33,6 +35,7 @@ Jalankan perintah berikut dari folder utama proyek:
 
 ```bash
 flutter pub get
+dart run build_runner build
 ```
 
 ### 4. Periksa Perangkat yang Tersedia
@@ -44,20 +47,42 @@ flutter devices
 Pastikan perangkat tujuan terdeteksi. Jika menggunakan emulator,
 nyalakan emulator terlebih dahulu.
 
-### 5. Jalankan Aplikasi
+### 5. Jalankan Backend Django
 
-```bash
+Clone [repositori backend Django](https://github.com/nalkq/myportofolio) ke folder terpisah. Dari folder backend yang berisi `manage.py`, jalankan perintah berikut di PowerShell:
+
+```powershell
+python -m venv .venv
+.\.venv\Scripts\Activate.ps1
+python -m pip install -r requirements.txt
+python manage.py migrate
+```
+
+Untuk menguji pembuatan Experience, buat akun superuser dengan `python manage.py createsuperuser` jika belum punya. Lalu nyalakan server:
+
+```powershell
+python manage.py runserver
+```
+
+Daftar Experience tersedia di `http://localhost:8000/api/v1/experiences/` dan bisa dibuka tanpa login.
+
+### 6. Jalankan Flutter
+
+Biarkan Django berjalan. Buka terminal kedua di folder `myportofolio_mobile`.
+
+Untuk emulator Android:
+
+```powershell
 flutter run
 ```
 
-Jika tersedia beberapa perangkat, pilih perangkat tujuan saat diminta.
+Untuk Chrome:
 
-Untuk menjalankan aplikasi langsung di Chrome, gunakan:
-
-```bash
-flutter run -d chrome
+```powershell
+flutter run -d chrome --dart-define=API_BASE_URL=http://localhost:8000
 ```
 
+Buka **Lihat Experience** untuk melihat daftar dan detail. Untuk menambah data, pilih **Tambah Experience** dan masuk dengan akun superuser Django.
 
 ## AI Disclosure
 Tentu projek yang saya kerjakan ini memiliki andil AI di dalamnya, AI membantu saya mengeksplor apa saja yang bisa dilakukan flutter dan memberikan saya berbagai macam pilihan style yang dapat saya implementasikan ke projek yang saya kerjakan ini. AI juga membantu saya dalam memahami tata cara conventional commits yang baik dan benar agar sesuai dengan standar profesional. AI juga membantu saya dalam memberikan panduan penambahan/perubahan kode apa yang harus saya lakukan, membantu memahami konteks materi yang ditanyakan di pertanyaan reflektif, serta membantu saya dalam menyusun README.md yang baik dan benar.
