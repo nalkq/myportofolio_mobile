@@ -1,5 +1,11 @@
 import 'package:material_ui/material_ui.dart';
 import 'package:myportofolio_mobile/widgets/left_drawer.dart';
+import 'package:http/http.dart' show ClientException;
+import 'package:myportofolio_mobile/models/experience.dart';
+import 'package:myportofolio_mobile/services/api_client.dart';
+import 'package:myportofolio_mobile/services/auth_state.dart';
+import 'package:myportofolio_mobile/widgets/auth_guard.dart';
+import 'package:provider/provider.dart';
 
 class ExperienceFormPage extends StatefulWidget {
   const ExperienceFormPage({super.key});
@@ -16,6 +22,7 @@ class _ExperienceFormPageState extends State<ExperienceFormPage> {
   String _dateRange = '';
   String _description = '';
   bool _isActive = false;
+  bool _isSaving = false;
 
   // Validasi bersama untuk input teks.
   String? _validateText(String? value, String label, {int? maxLength}) {
@@ -32,45 +39,70 @@ class _ExperienceFormPageState extends State<ExperienceFormPage> {
     return null;
   }
 
-  void _showSummary() {
+  Future<void> _submit() async {
     final form = _formKey.currentState;
-
-    if (form == null || !form.validate()) {
-      return;
-    }
-
-    // Menjalankan onSaved pada setiap field.
+    if (_isSaving || form == null || !form.validate()) return;
     form.save();
 
-    showDialog<void>(
-      context: context,
-      builder: (dialogContext) {
-        return AlertDialog(
-          title: const Text('Experience berhasil ditambahkan!'),
-          content: SingleChildScrollView(
-            child: Column(
-              mainAxisSize: MainAxisSize.min,
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text('Judul/Posisi: $_title'),
-                Text('Perusahaan/Organisasi: $_company'),
-                Text('Periode: $_dateRange'),
-                Text('Deskripsi: $_description'),
-                Text('Status aktif: ${_isActive ? "Ya" : "Tidak"}'),
-              ],
-            ),
-          ),
+    setState(() => _isSaving = true);
+
+    try {
+      final allowed = await ensureLoggedIn(context);
+      if (!mounted || !allowed) return;
+
+      final token = context.read<AuthState>().token;
+      if (token == null) return;
+
+      final saved = await context.read<ApiClient>().createExperience(
+        Experience(
+          title: _title,
+          company: _company,
+          dateRange: _dateRange,
+          description: _description,
+          isActive: _isActive,
+        ),
+        token: token,
+      );
+      if (!mounted) return;
+
+      await showDialog<void>(
+        context: context,
+        builder: (dialogContext) => AlertDialog(
+          title: const Text('Experience berhasil ditambahkan'),
+          content: Text(saved.title),
           actions: [
             TextButton(
-              onPressed: () {
-                Navigator.pop(dialogContext);
-              },
+              onPressed: () => Navigator.of(dialogContext).pop(),
               child: const Text('OK'),
             ),
           ],
-        );
-      },
-    );
+        ),
+      );
+      if (mounted) Navigator.of(context).pop(true);
+    } on ApiException catch (error) {
+      if (!mounted) return;
+
+      if (error.statusCode == 401) {
+        context.read<AuthState>().clearSession();
+        await ensureLoggedIn(context);
+        return;
+      }
+
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text(
+            'Gagal menyimpan Experience (HTTP ${error.statusCode}).',
+          ),
+        ),
+      );
+    } on ClientException {
+      if (!mounted) return;
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text('Tidak bisa terhubung ke server.')),
+      );
+    } finally {
+      if (mounted) setState(() => _isSaving = false);
+    }
   }
 
   @override
@@ -182,7 +214,7 @@ class _ExperienceFormPageState extends State<ExperienceFormPage> {
                     foregroundColor: colors.onPrimary,
                     padding: const EdgeInsets.symmetric(vertical: 16),
                   ),
-                  onPressed: _showSummary,
+                  onPressed: _isSaving ? null : _submit,
                   child: const Text('Simpan'),
                 ),
               ],
