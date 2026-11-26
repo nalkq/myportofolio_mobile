@@ -18,11 +18,7 @@ class _ExperienceFormPageState extends State<ExperienceFormPage> {
   bool _isActive = false;
 
   // Validasi bersama untuk input teks.
-  String? _validateText(
-    String? value,
-    String label, {
-    int? maxLength,
-  }) {
+  String? _validateText(String? value, String label, {int? maxLength}) {
     final text = value?.trim() ?? '';
 
     if (text.isEmpty) {
@@ -60,9 +56,7 @@ class _ExperienceFormPageState extends State<ExperienceFormPage> {
                 Text('Perusahaan/Organisasi: $_company'),
                 Text('Periode: $_dateRange'),
                 Text('Deskripsi: $_description'),
-                Text(
-                  'Status aktif: ${_isActive ? "Ya" : "Tidak"}',
-                ),
+                Text('Status aktif: ${_isActive ? "Ya" : "Tidak"}'),
               ],
             ),
           ),
@@ -95,8 +89,7 @@ class _ExperienceFormPageState extends State<ExperienceFormPage> {
           key: _formKey,
           child: SingleChildScrollView(
             padding: const EdgeInsets.all(16),
-            keyboardDismissBehavior:
-                ScrollViewKeyboardDismissBehavior.onDrag,
+            keyboardDismissBehavior: ScrollViewKeyboardDismissBehavior.onDrag,
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.stretch,
               children: [
@@ -109,11 +102,7 @@ class _ExperienceFormPageState extends State<ExperienceFormPage> {
                   ),
                   textCapitalization: TextCapitalization.words,
                   validator: (value) {
-                    return _validateText(
-                      value,
-                      'Judul/Posisi',
-                      maxLength: 100,
-                    );
+                    return _validateText(value, 'Judul/Posisi', maxLength: 100);
                   },
                   onSaved: (value) {
                     _title = value!.trim();
@@ -148,11 +137,7 @@ class _ExperienceFormPageState extends State<ExperienceFormPage> {
                     border: OutlineInputBorder(),
                   ),
                   validator: (value) {
-                    return _validateText(
-                      value,
-                      'Periode',
-                      maxLength: 50,
-                    );
+                    return _validateText(value, 'Periode', maxLength: 50);
                   },
                   onSaved: (value) {
                     _dateRange = value!.trim();

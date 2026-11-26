@@ -19,17 +19,13 @@ class ExperienceCard extends StatelessWidget {
             ..hideCurrentSnackBar()
             ..showSnackBar(
               SnackBar(
-                content: Text(
-                  "Kamu telah menekan tombol ${item.name}!",
-                ),
+                content: Text("Kamu telah menekan tombol ${item.name}!"),
               ),
             );
 
           Navigator.push(
             context,
-            MaterialPageRoute(
-              builder: (context) => const ExperienceFormPage(),
-            ),
+            MaterialPageRoute(builder: (context) => const ExperienceFormPage()),
           );
         },
         child: Padding(
@@ -38,11 +34,7 @@ class ExperienceCard extends StatelessWidget {
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                Icon(
-                  item.icon,
-                  color: Colors.white,
-                  size: 30,
-                ),
+                Icon(item.icon, color: Colors.white, size: 30),
                 const SizedBox(height: 6),
                 Text(
                   item.name,

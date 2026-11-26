@@ -13,8 +13,12 @@ class MyHomePage extends StatelessWidget {
 
   final List<ItemHomepage> items = [
     ItemHomepage("Lihat Proyek", Icons.folder, Colors.blue.shade700),
-    ItemHomepage("Tambah Proyek", Icons.add_circle, Colors.green.shade700,),
-    ItemHomepage("Tambah Experience",Icons.work_outline,Colors.orange.shade700,),
+    ItemHomepage("Tambah Proyek", Icons.add_circle, Colors.green.shade700),
+    ItemHomepage(
+      "Tambah Experience",
+      Icons.work_outline,
+      Colors.orange.shade700,
+    ),
     ItemHomepage("Logout", Icons.logout, Colors.red.shade700),
   ];
 
@@ -42,9 +46,15 @@ class MyHomePage extends StatelessWidget {
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               children: [
-                Expanded(child: InfoCard(title: 'NPM', content: npm),),
-                Expanded(child: InfoCard(title: 'Name', content: nama),),
-                Expanded(child: InfoCard(title: 'Class', content: kelas),),
+                Expanded(
+                  child: InfoCard(title: 'NPM', content: npm),
+                ),
+                Expanded(
+                  child: InfoCard(title: 'Name', content: nama),
+                ),
+                Expanded(
+                  child: InfoCard(title: 'Class', content: kelas),
+                ),
               ],
             ),
 
@@ -72,8 +82,9 @@ class MyHomePage extends StatelessWidget {
                     padding: const EdgeInsets.all(20),
                     crossAxisSpacing: 10,
                     mainAxisSpacing: 10,
-                    crossAxisCount:
-                        MediaQuery.of(context).size.width < 600 ? 2 : 3,
+                    crossAxisCount: MediaQuery.of(context).size.width < 600
+                        ? 2
+                        : 3,
                     shrinkWrap: true,
                     children: items.map((ItemHomepage item) {
                       if (item.name == "Tambah Experience") {

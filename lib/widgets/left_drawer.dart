@@ -45,9 +45,7 @@ class LeftDrawer extends StatelessWidget {
               navigator.pop();
 
               navigator.pushReplacement(
-                MaterialPageRoute(
-                  builder: (context) => MyHomePage(),
-                ),
+                MaterialPageRoute(builder: (context) => MyHomePage()),
               );
             },
           ),
