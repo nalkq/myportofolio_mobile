@@ -10,6 +10,12 @@ class AuthState extends ChangeNotifier {
   String? get token => _token;
   bool get isLoggedIn => _token != null;
 
+  void clearSession() {
+    if (_token == null) return;
+    _token = null;
+    notifyListeners();
+  }
+
   Future<void> login(String username, String password) async {
     _token = await _apiClient.obtainToken(username, password);
     notifyListeners();
@@ -24,8 +30,7 @@ class AuthState extends ChangeNotifier {
     } on ApiException catch (error) {
       debugPrint('Request logout gagal (HTTP ${error.statusCode}).');
     } finally {
-      _token = null;
-      notifyListeners();
+      clearSession();
     }
   }
 }

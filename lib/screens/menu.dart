@@ -14,8 +14,9 @@ class MyHomePage extends StatelessWidget {
   final List<ItemHomepage> items = [
     ItemHomepage("Lihat Proyek", Icons.folder, Colors.blue.shade700),
     ItemHomepage("Tambah Proyek", Icons.add_circle, Colors.green.shade700),
+    ItemHomepage('Lihat Experience', Icons.list_alt, Colors.teal.shade700),
     ItemHomepage(
-      "Tambah Experience",
+      'Tambah Experience',
       Icons.work_outline,
       Colors.orange.shade700,
     ),
@@ -87,7 +88,8 @@ class MyHomePage extends StatelessWidget {
                         : 3,
                     shrinkWrap: true,
                     children: items.map((ItemHomepage item) {
-                      if (item.name == "Tambah Experience") {
+                      if (item.name == 'Tambah Experience' ||
+                          item.name == 'Lihat Experience') {
                         return ExperienceCard(item);
                       }
 
