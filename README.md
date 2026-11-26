@@ -97,6 +97,11 @@ Pada pengerjaan tugas kali ini, saya cukup kesulitan untuk mencoba membuat tampi
 
 https://chatgpt.com/s/cx_6b002fa590f48191981ab112700e9451
 
+### Tugas 9
+Pada pengerjaan tugas kali ini, saya sangat kesulitan dalam memahami apa yang harus dilakukan. Sinkronisasi backend django merupakan hal yang sangat baru dalam pengalaman mengerjakan portofolio ini dan saya sempat tidak paham sama sekali apa yang AI beritahu. Saya juga menggunakan AI untuk membantu saya lebih paham lagi apa yang ditanyakan pada pertanyaan reflektif.
+
+https://chatgpt.com/s/cx_6b07ec0beb048191a854530989b12494
+
 ## Pertanyaan Reflektif
 ### Tugas 7
 
@@ -156,3 +161,18 @@ Saya juga menggunakan `SingleChildScrollView` agar formulir bisa digulir. Dengan
 `GlobalKey<FormState>` digunakan untuk mengakses keadaan form. Setiap `validator` berisi aturan pemeriksaan input pada kolom terkait. Saat tombol Simpan ditekan, `validate()` menjalankan seluruh pemeriksaan tersebut.
 Jika ada input yang salah, pesan kesalahan ditampilkan pada kolom terkait. Jika semuanya benar, aplikasi menampilkan dialog berisi isian pengguna.
 Contoh input yang ditolak adalah judul yang hanya berisi spasi, karena judul wajib memiliki isi. Judul yang melebihi 100 karakter juga ditolak. Memilih jenis input atau keyboard saja belum cukup karena tidak otomatis memeriksa apakah kolom kosong, hanya berisi spasi, atau terlalu panjang.
+
+
+### Tugas 9
+
+#### 1. Mengapa kita menggunakan `@JsonSerializable(fieldRename: FieldRename.snake)` dan `@JsonKey(includeToJson: false)` alih-alih mengirim objek `Map<String, dynamic>` mentah langsung dari widget? Jelaskan satu bug yang dicegah atau dapat dicegah oleh pendekatan ini pada model bagianmu.
+Saya menggunakan `@JsonSerializable(fieldRename: FieldRename.snake)` supaya model `Experience` otomatis mengubah nama field Dart seperti `dateRange` menjadi `date_range` saat dikirim ke Django. Ini mencegah periode pengalaman hilang karena salah menulis nama key JSON. Saya juga memakai `@JsonKey(includeToJson: false)` pada `id` supaya Flutter tetap bisa membaca ID dari respons, sementara Django yang menetapkan ID saat entri baru dibuat.
+
+#### 2. Mengapa `Future` yang diteruskan ke `FutureBuilder` harus diinisialisasi di dalam `initState()` alih-alih langsung di dalam `build()`, dan mengapa `ApiClient` sebaiknya melempar `ApiException` daripada mengembalikan `null` pada respons HTTP non-2xx?
+Saya membuat Future di `initState()` agar daftar Experience dimuat sekali saat layar dibuka. Jika `getExperiences()` dipanggil di dalam `build()`, request bisa terkirim ulang setiap kali widget dibangun ulang. `ApiException` menyimpan status HTTP supaya aplikasi bisa membedakan daftar kosong yang berhasil dimuat dari request yang gagal. Contohnya, jika POST mendapat `401`, aplikasi menghapus sesi lokal dan meminta login ulang.
+
+#### 3. Bandingkan `SessionAuthentication` milik Django (dari Tutorial 04/07) dengan `TokenAuthentication` milik DRF (dari Tutorial 10). Mengapa `myportfolio_mobile` menggunakan `TokenAuthentication` sementara `SessionAuthentication` tetap diaktifkan pada backend Django?
+`SessionAuthentication` mengenali pengguna lewat cookie sesi Django. Saat form web mengirim data, request juga membawa token CSRF. Flutter mendapatkan token saat login dan mengirimkannya lewat header `Authorization: Token <key>` saat menyimpan Experience. Backend tetap mendukung sesi karena halaman web Django masih menggunakannya, sedangkan POST Experience melalui API memerlukan token.
+
+#### 4. Jelaskan peran job `build` (`very_good_workflows`) dan `build_apk` dalam pipeline `.github/workflows/main.yaml` milikmu (termasuk pemeriksaan apa saja yang dijalankan `very_good_workflows` di balik layar). Mengapa berkas `*.g.dart` dimasukkan ke `.gitignore` meskipun CI membutuhkannya untuk menganalisis dan membangun aplikasi?
+Job `build` memakai `very_good_workflows` untuk memasang dependensi, membuat ulang kode dari model, memeriksa format, menjalankan analyzer, dan menjalankan tes beserta pengukuran coverage. Job `build_apk` berjalan setelah `build` lulus, lalu membuat APK release dan mengunggahnya sebagai `app-release-apk`. File `*.g.dart` diabaikan Git karena bisa dibuat ulang dari model Dart. Kedua job menjalankan `build_runner` agar file itu tersedia setelah checkout.
