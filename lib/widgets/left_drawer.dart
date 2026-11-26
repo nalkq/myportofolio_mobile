@@ -66,6 +66,19 @@ class LeftDrawer extends StatelessWidget {
             },
           ),
           ListTile(
+            leading: const Icon(Icons.work_outline),
+            title: const Text('Add Experience'),
+            onTap: () {
+              final navigator = Navigator.of(context);
+              Scaffold.of(context).closeDrawer();
+              navigator.push<void>(
+                MaterialPageRoute<void>(
+                  builder: (_) => const ExperienceFormPage(),
+                ),
+              );
+            },
+          ),
+          ListTile(
             leading: Icon(isLoggedIn ? Icons.logout : Icons.login),
             title: Text(isLoggedIn ? 'Logout' : 'Login'),
             onTap: () async {
