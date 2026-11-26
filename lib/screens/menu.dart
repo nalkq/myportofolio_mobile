@@ -1,6 +1,7 @@
 import 'package:material_ui/material_ui.dart';
 import 'package:myportofolio_mobile/widgets/left_drawer.dart';
 import 'package:myportofolio_mobile/widgets/project_card.dart';
+import 'package:myportofolio_mobile/models/project.dart';
 import 'package:myportofolio_mobile/widgets/experience_card.dart';
 
 class MyHomePage extends StatelessWidget {
@@ -12,8 +13,12 @@ class MyHomePage extends StatelessWidget {
 
   final List<ItemHomepage> items = [
     ItemHomepage("Lihat Proyek", Icons.folder, Colors.blue.shade700),
-    ItemHomepage("Tambah Proyek", Icons.add_circle, Colors.green.shade700,),
-    ItemHomepage("Tambah Experience",Icons.work_outline,Colors.orange.shade700,),
+    ItemHomepage("Tambah Proyek", Icons.add_circle, Colors.green.shade700),
+    ItemHomepage(
+      "Tambah Experience",
+      Icons.work_outline,
+      Colors.orange.shade700,
+    ),
     ItemHomepage("Logout", Icons.logout, Colors.red.shade700),
   ];
 
@@ -25,13 +30,10 @@ class MyHomePage extends StatelessWidget {
       appBar: AppBar(
         title: const Text(
           'MyPortfolio',
-          style: TextStyle(
-            color: Colors.white,
-            fontWeight: FontWeight.bold,
-          ),
+          style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
         ),
         backgroundColor: Theme.of(context).colorScheme.primary,
-        iconTheme: const IconThemeData(color: Colors.white)
+        iconTheme: const IconThemeData(color: Colors.white),
       ),
       drawer: const LeftDrawer(),
       // Body halaman utama dengan padding di sekelilingnya.
@@ -44,9 +46,15 @@ class MyHomePage extends StatelessWidget {
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               children: [
-                Expanded(child: InfoCard(title: 'NPM', content: npm),),
-                Expanded(child: InfoCard(title: 'Name', content: nama),),
-                Expanded(child: InfoCard(title: 'Class', content: kelas),),
+                Expanded(
+                  child: InfoCard(title: 'NPM', content: npm),
+                ),
+                Expanded(
+                  child: InfoCard(title: 'Name', content: nama),
+                ),
+                Expanded(
+                  child: InfoCard(title: 'Class', content: kelas),
+                ),
               ],
             ),
 
@@ -74,8 +82,9 @@ class MyHomePage extends StatelessWidget {
                     padding: const EdgeInsets.all(20),
                     crossAxisSpacing: 10,
                     mainAxisSpacing: 10,
-                    crossAxisCount:
-                        MediaQuery.of(context).size.width < 600 ? 2 : 3,
+                    crossAxisCount: MediaQuery.of(context).size.width < 600
+                        ? 2
+                        : 3,
                     shrinkWrap: true,
                     children: items.map((ItemHomepage item) {
                       if (item.name == "Tambah Experience") {
@@ -112,10 +121,7 @@ class InfoCard extends StatelessWidget {
         // Menyusun teks title dan content secara vertikal.
         child: Column(
           children: [
-            Text(
-              title,
-              style: const TextStyle(fontWeight: FontWeight.bold),
-            ),
+            Text(title, style: const TextStyle(fontWeight: FontWeight.bold)),
             const SizedBox(height: 8.0),
             Text(content),
           ],
@@ -131,4 +137,33 @@ class ItemHomepage {
   final Color color;
 
   ItemHomepage(this.name, this.icon, this.color);
+}
+
+class ProjectDetailScreen extends StatelessWidget {
+  const ProjectDetailScreen({super.key, required this.project});
+
+  final Project project;
+
+  @override
+  Widget build(BuildContext context) {
+    final imageUrl = project.projectImageUrl.trim();
+
+    return Scaffold(
+      appBar: AppBar(title: Text(project.title)),
+      body: ListView(
+        padding: const EdgeInsets.all(16),
+        children: [
+          if (imageUrl.isNotEmpty) ...[
+            Image.network(imageUrl),
+            const SizedBox(height: 16),
+          ],
+          Text(project.description),
+          const SizedBox(height: 16),
+          Text('Teknologi: ${project.techStack}'),
+          const SizedBox(height: 8),
+          SelectableText(project.projectUrl),
+        ],
+      ),
+    );
+  }
 }
